@@ -22,6 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private SQLiteDatabase dbObj;
     private final Context context;
+    Cursor cursor ;
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -48,8 +49,6 @@ public class DBHelper extends SQLiteOpenHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
     @Override
     public void onUpgrade(SQLiteDatabase DB, int i, int ii) {
@@ -59,7 +58,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getdata ()
     {
         SQLiteDatabase DB = this.getWritableDatabase();
-        Cursor cursor = DB.rawQuery("Select * from words", null);
+        cursor = DB.rawQuery("select word from words UNION select meaning from words_meanings order by 1 ", null);
         return cursor;
     }
 
@@ -91,26 +90,6 @@ public class DBHelper extends SQLiteOpenHelper {
             Log.i("myPath ......",path);
             if (checkDB!=null)
             {
-                Cursor c= checkDB.rawQuery("SELECT * FROM bank", null);
-                Log.i("Cursor.......",c.getString(0));
-                c.moveToFirst();
-                String contents[]=new String[80];
-                int flag=0;
-
-                while(! c.isAfterLast())
-                {
-                    String temp="";
-                    String s2=c.getString(0);
-                    String s3=c.getString(1);
-                    String s4=c.getString(2);
-                    temp=temp+"\n Id:"+s2+"\tType:"+s3+"\tBal:"+s4;
-                    contents[flag]=temp;
-                    flag=flag+1;
-
-                    Log.i("DB values.........",temp);
-                    c.moveToNext();
-
-                }
             }
             else
             {
